@@ -74,9 +74,8 @@ export const ReorderableFlatList = <T,>(props: ReorderableFlatListProps<T>) => {
         <ListItem
           ref={handleRef}
           item={item}
-          // @ts-ignore
+          renderItem={props.renderItem}
           onMoveUp={moveUp}
-          // @ts-ignore
           onMoveDown={moveDown}
         />
       );
