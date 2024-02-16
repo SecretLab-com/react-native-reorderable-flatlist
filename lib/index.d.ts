@@ -1,2 +1,2 @@
 export { ReorderableFlatList } from "./ReorderableFlatlist";
-export type { ReorderableFlatListProps } from "./types";
+export type { ReorderableFlatListProps, ListRenderItem } from "./types";

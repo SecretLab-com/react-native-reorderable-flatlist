@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { ColorValue, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { ColorValue, Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { ReorderableFlatList } from "react-native-reorderable-flatlist";
 
 type ExampleData = {
@@ -46,9 +46,11 @@ export default function App() {
     <SafeAreaView style={styles.container}>
       <ReorderableFlatList
         data={exampleData}
-        renderItem={({ item }) => (
-          <View style={{ backgroundColor: item.color }}>
+        renderItem={({ item, moveDown, moveUp }) => (
+          <View style={{ backgroundColor: item.color, paddingVertical: 20 }}>
+            <Pressable onPress={moveUp}><Text>Up</Text></Pressable>
             <Text>Item</Text>
+            <Pressable onPress={moveDown}><Text>Down</Text></Pressable>
           </View>
         )}
         keyExtractor={(item) => item.id}
@@ -60,6 +62,5 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "red",
   },
 });

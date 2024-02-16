@@ -1,13 +1,13 @@
 import React, {
-  FC,
   ForwardedRef,
   forwardRef,
   useCallback,
   useImperativeHandle,
+  useMemo,
   useRef,
 } from "react";
-import { View, Pressable, StyleSheet, Text } from "react-native";
-import { ReorderableFlatListProps } from "./types";
+import { View, StyleSheet } from "react-native";
+import { ListItemProps } from "./types";
 
 export type ListItem = {
   measureInWindow: () => Promise<{
@@ -18,21 +18,15 @@ export type ListItem = {
   }>;
 };
 
-type ListItemProps<T> = {
-  item: T;
-  renderItem: ReorderableFlatListProps<T>["renderItem"];
-  onMoveUp?: (
-    item: T,
-    startingPosition: { x: number; y: number; height: number; width: number }
-  ) => void;
-  onMoveDown?: (
-    item: T,
-    startingPosition: { x: number; y: number; height: number; width: number }
-  ) => void;
-};
-
 const ListItemComponent = <T,>(
-  { item, renderItem, onMoveDown, onMoveUp }: ListItemProps<T>,
+  {
+    item,
+    index,
+    listLength,
+    renderItem,
+    onMoveDown,
+    onMoveUp,
+  }: ListItemProps<T>,
   ref: ForwardedRef<ListItem>
 ) => {
   const viewRef = useRef<View>(null);
@@ -73,9 +67,20 @@ const ListItemComponent = <T,>(
       }),
   }));
 
+  const renderedContent = useMemo(() => {
+    return renderItem({
+      item,
+      moveUp: handleMoveUp,
+      moveDown: handleMoveDown,
+      index,
+      canMoveDown: index < listLength - 1,
+      canMoveUp: index > 0,
+    });
+  }, []);
+
   return (
     <View ref={viewRef} style={[styles.listItem]}>
-      {renderItem({ item, moveUp: handleMoveUp, moveDown: handleMoveDown })}
+      {renderedContent}
     </View>
   );
 };

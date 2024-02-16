@@ -1,15 +1,14 @@
 import { Animated, View } from "react-native";
-import { OverlayProps } from "./types";
+import { AnimationOverlayProps } from "./types";
 import { ListItem } from "./ListItem";
 import { useEffect, useRef } from "react";
-import { handleMoveDown, handleMoveUp } from "./utils";
 
 export const AnimationOverlay = <T,>({
   animationOverlayConfig,
   onOverlayAnimationComplete,
   renderItem,
-  keyExtractor,
-}: OverlayProps<T>) => {
+  listLength,
+}: AnimationOverlayProps<T>) => {
   const animation = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -21,13 +20,9 @@ export const AnimationOverlay = <T,>({
         useNativeDriver: false,
       }).start(() => {
         if (animationOverlayConfig.operation === "moveUp") {
-          onOverlayAnimationComplete((currentData) =>
-            handleMoveUp(currentData, animationOverlayConfig.item, keyExtractor)
-          );
+          onOverlayAnimationComplete("moveUp", animationOverlayConfig.item);
         } else {
-          onOverlayAnimationComplete((currentData) =>
-            handleMoveDown(currentData, animationOverlayConfig.item, keyExtractor)
-          );
+          onOverlayAnimationComplete("moveDown", animationOverlayConfig.item);
         }
       });
     } else {
@@ -81,7 +76,12 @@ export const AnimationOverlay = <T,>({
           width: "100%",
         }}
       >
-        <ListItem item={animationOverlayConfig.partnerItem} renderItem={renderItem} />
+        <ListItem
+          item={animationOverlayConfig.partnerItem}
+          renderItem={renderItem}
+          index={animationOverlayConfig.startIndex}
+          listLength={listLength}
+        />
       </Animated.View>
       {/* Target Item */}
       <Animated.View
@@ -98,7 +98,16 @@ export const AnimationOverlay = <T,>({
           width: "100%",
         }}
       >
-        <ListItem item={animationOverlayConfig.item} renderItem={renderItem} />
+        <ListItem<T>
+          item={animationOverlayConfig.item}
+          renderItem={renderItem}
+          index={
+            animationOverlayConfig.operation === "moveUp"
+              ? animationOverlayConfig.startIndex - 1
+              : animationOverlayConfig.startIndex + 1
+          }
+          listLength={listLength}
+        />
       </Animated.View>
     </View>
   );

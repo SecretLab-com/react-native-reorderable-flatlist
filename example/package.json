@@ -6,7 +6,8 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "refresh": "(cd ../; yarn install; npx tsc; rm -rf node_modules; yarn install --prod); yarn upgrade react-native-reorderable-flatlist;"
   },
   "dependencies": {
     "@expo/metro-runtime": "~3.1.3",

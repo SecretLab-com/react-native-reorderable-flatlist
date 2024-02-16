@@ -2,7 +2,12 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { FlatList, ListRenderItem, StyleSheet, View } from "react-native";
 import { ListItem } from "./ListItem";
 import { AnimationOverlay } from "./AnimationOverlay";
-import { ReorderableFlatListProps, AnimationOverlayConfig } from "./types";
+import {
+  ReorderableFlatListProps,
+  AnimationOverlayConfig,
+  AnimationOverlayProps,
+} from "./types";
+import { handleMoveDown, handleMoveUp } from "./utils";
 
 export const ReorderableFlatList = <T,>(props: ReorderableFlatListProps<T>) => {
   const [data, setData] = useState<T[]>(props.data ?? []);
@@ -31,6 +36,7 @@ export const ReorderableFlatList = <T,>(props: ReorderableFlatListProps<T>) => {
 
       setOverlay({
         item,
+        startIndex: index,
         partnerItem: data[index - 1],
         operation: "moveUp",
         startingPosition,
@@ -54,6 +60,7 @@ export const ReorderableFlatList = <T,>(props: ReorderableFlatListProps<T>) => {
       const { x, y, width, height } = await itemBelowRef.measureInWindow();
       setOverlay({
         item,
+        startIndex: index,
         partnerItem: data[index + 1],
         operation: "moveDown",
         startingPosition,
@@ -64,7 +71,7 @@ export const ReorderableFlatList = <T,>(props: ReorderableFlatListProps<T>) => {
   );
 
   const renderItem: ListRenderItem<T> = useCallback(
-    ({ item }) => {
+    ({ item, index }) => {
       const handleRef = (ref: ListItem | null) => {
         if (ref) {
           itemRefs.current[props.keyExtractor(item)] = ref;
@@ -74,6 +81,8 @@ export const ReorderableFlatList = <T,>(props: ReorderableFlatListProps<T>) => {
         <ListItem
           ref={handleRef}
           item={item}
+          index={index}
+          listLength={data.length}
           renderItem={props.renderItem}
           onMoveUp={moveUp}
           onMoveDown={moveDown}
@@ -83,7 +92,20 @@ export const ReorderableFlatList = <T,>(props: ReorderableFlatListProps<T>) => {
     [moveDown, moveUp]
   );
 
-  const handleOverlayAnimationComplete = useCallback(setData, []);
+  const handleOverlayAnimationComplete = useCallback<
+    AnimationOverlayProps<T>["onOverlayAnimationComplete"]
+  >((operation, item) => {
+    if (operation === "moveUp") {
+      setData((currentData) =>
+        handleMoveUp(currentData, item, props.keyExtractor)
+      );
+    } else {
+      setData((currentData) =>
+        handleMoveDown(currentData, item, props.keyExtractor)
+      );
+    }
+    setOverlay(null);
+  }, []);
 
   return (
     <View>
@@ -96,8 +118,8 @@ export const ReorderableFlatList = <T,>(props: ReorderableFlatListProps<T>) => {
         <AnimationOverlay
           animationOverlayConfig={overlay}
           onOverlayAnimationComplete={handleOverlayAnimationComplete}
-          keyExtractor={props.keyExtractor}
           renderItem={props.renderItem}
+          listLength={data.length}
         />
       )}
     </View>
