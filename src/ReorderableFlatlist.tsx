@@ -83,7 +83,7 @@ export const ReorderableFlatList = <T,>(props: ReorderableFlatListProps<T>) => {
     [moveDown, moveUp]
   );
 
-  const handleOverlayAnimationComplete = useCallback(() => {}, []);
+  const handleOverlayAnimationComplete = useCallback(setData, []);
 
   return (
     <View>
