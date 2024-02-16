@@ -90,7 +90,6 @@ export const ReorderableFlatList = <T,>(props: ReorderableFlatListProps<T>) => {
       <FlatList
         data={data}
         renderItem={renderItem}
-        ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
         keyExtractor={(item) => props.keyExtractor(item)}
       />
       {overlay && (
