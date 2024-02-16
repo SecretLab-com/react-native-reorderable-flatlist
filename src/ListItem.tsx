@@ -91,8 +91,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  listItem: {
-    backgroundColor: "fuchsia",
-    height: 100,
-  },
+  listItem: {},
 });
