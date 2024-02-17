@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { FlatListProps } from "react-native";
 
 export type ListRenderItem<T> = (props: {
   item: T;
@@ -14,6 +15,14 @@ export type ReorderableFlatListProps<T> = {
   renderItem: ListRenderItem<T>;
   keyExtractor: (data: T) => string;
   onReorder?: (newData: T[]) => void;
+
+  // Standard Props
+
+  containerStyle?: FlatListProps<T>["style"];
+  contentContainerStyle?: FlatListProps<T>["contentContainerStyle"];
+
+  showsVerticalScrollIndicator?: FlatListProps<T>["showsVerticalScrollIndicator"]
+  showsHorizontalScrollIndicator?: FlatListProps<T>["showsHorizontalScrollIndicator"]
 };
 
 export type ListItemProps<T> = {

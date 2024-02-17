@@ -10,7 +10,13 @@ import {
 import { handleMoveDown, handleMoveUp } from "./utils";
 
 export const ReorderableFlatList = <T,>(props: ReorderableFlatListProps<T>) => {
-  const [data, setData] = useState<T[]>(props.data ?? []);
+  const {
+    renderItem: renderItemProp,
+    keyExtractor,
+    data: dataProp,
+    ...flatListProps
+  } = props;
+  const [data, setData] = useState<T[]>(dataProp ?? []);
 
   useEffect(() => {
     setData(props.data);
@@ -83,7 +89,7 @@ export const ReorderableFlatList = <T,>(props: ReorderableFlatListProps<T>) => {
           item={item}
           index={index}
           listLength={data.length}
-          renderItem={props.renderItem}
+          renderItem={renderItemProp}
           onMoveUp={moveUp}
           onMoveDown={moveDown}
         />
@@ -113,6 +119,7 @@ export const ReorderableFlatList = <T,>(props: ReorderableFlatListProps<T>) => {
         data={data}
         renderItem={renderItem}
         keyExtractor={(item) => props.keyExtractor(item)}
+        {...flatListProps}
       />
       {overlay && (
         <AnimationOverlay
