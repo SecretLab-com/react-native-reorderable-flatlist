@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { FlatList, ListRenderItem, StyleSheet, View } from "react-native";
-import { ListItem } from "./ListItem";
+import { ListItemContainer } from "./ListItemContainer";
 import { AnimationOverlay } from "./AnimationOverlay";
 import { ReorderableFlatListProps, AnimationOverlayConfig, AnimationOverlayProps } from "./types";
 import { handleMoveDown, handleMoveUp } from "./utils";
@@ -15,7 +15,7 @@ export const ReorderableFlatList = <T,>(props: ReorderableFlatListProps<T>) => {
 
   const [overlay, setOverlay] = useState<AnimationOverlayConfig<T> | null>(null);
 
-  const itemRefs = useRef<Record<string, ListItem>>({});
+  const itemRefs = useRef<Record<string, ListItemContainer>>({});
 
   const moveUp = useCallback(
     async (item: T, startingPosition: { x: number; y: number; height: number; width: number }) => {
@@ -57,13 +57,13 @@ export const ReorderableFlatList = <T,>(props: ReorderableFlatListProps<T>) => {
 
   const renderItem: ListRenderItem<T> = useCallback(
     ({ item, index }) => {
-      const handleRef = (ref: ListItem | null) => {
+      const handleRef = (ref: ListItemContainer | null) => {
         if (ref) {
           itemRefs.current[props.keyExtractor(item)] = ref;
         }
       };
       return (
-        <ListItem
+        <ListItemContainer
           ref={handleRef}
           item={item}
           index={index}

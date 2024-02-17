@@ -7,9 +7,9 @@ import React, {
   useRef,
 } from "react";
 import { View, StyleSheet } from "react-native";
-import { ListItemProps } from "./types";
+import { ListItemContainerProps } from "./types";
 
-export type ListItem = {
+export type ListItemContainer = {
   measureInWindow: () => Promise<{
     x: number;
     y: number;
@@ -18,7 +18,7 @@ export type ListItem = {
   }>;
 };
 
-const ListItemComponent = <T,>(
+const ListItemContainerComponent = <T,>(
   {
     item,
     index,
@@ -26,8 +26,8 @@ const ListItemComponent = <T,>(
     renderItem,
     onMoveDown,
     onMoveUp,
-  }: ListItemProps<T>,
-  ref: ForwardedRef<ListItem>
+  }: ListItemContainerProps<T>,
+  ref: ForwardedRef<ListItemContainer>
 ) => {
   const viewRef = useRef<View>(null);
 
@@ -79,14 +79,14 @@ const ListItemComponent = <T,>(
   }, [handleMoveDown, handleMoveUp, index, item, listLength, renderItem]);
 
   return (
-    <View ref={viewRef} style={[styles.listItem]}>
+    <View ref={viewRef} style={[styles.ListItemContainer]}>
       {renderedContent}
     </View>
   );
 };
 
-export const ListItem = forwardRef(ListItemComponent) as <T>(
-  props: ListItemProps<T> & { ref?: ForwardedRef<ListItem> }
+export const ListItemContainer = forwardRef(ListItemContainerComponent) as <T>(
+  props: ListItemContainerProps<T> & { ref?: ForwardedRef<ListItemContainer> }
 ) => JSX.Element;
 
 const styles = StyleSheet.create({
@@ -96,5 +96,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  listItem: {},
+  ListItemContainer: {},
 });

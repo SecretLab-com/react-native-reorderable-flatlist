@@ -27,7 +27,7 @@ export type ReorderableFlatListProps<T> = {
   CellRendererComponent?: FlatListProps<T>["CellRendererComponent"];
 };
 
-export type ListItemProps<T> = {
+export type ListItemContainerProps<T> = {
   item: T;
   index: number;
   listLength: number;

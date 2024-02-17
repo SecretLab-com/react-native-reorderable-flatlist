@@ -1,6 +1,6 @@
 import { Animated, Dimensions, Modal, View } from "react-native";
 import { AnimationOverlayProps } from "./types";
-import { ListItem } from "./ListItem";
+import { ListItemContainer } from "./ListItemContainer";
 import { useEffect, useRef } from "react";
 
 export const AnimationOverlay = <T,>({
@@ -61,7 +61,9 @@ export const AnimationOverlay = <T,>({
           top: animationOverlayConfig.endingPosition.y,
           height: animationOverlayConfig.endingPosition.height,
           left: animationOverlayConfig.startingPosition.x,
-          right: Dimensions.get("window").width - (animationOverlayConfig.startingPosition.x + animationOverlayConfig.startingPosition.width),
+          right:
+            Dimensions.get("window").width -
+            (animationOverlayConfig.startingPosition.x + animationOverlayConfig.startingPosition.width),
           backgroundColor: "white",
         }}
       />
@@ -74,10 +76,12 @@ export const AnimationOverlay = <T,>({
             outputRange: [animationOverlayConfig.endingPosition.y, animationOverlayConfig.startingPosition.y],
           }),
           left: animationOverlayConfig.endingPosition.x,
-          right: Dimensions.get("window").width - (animationOverlayConfig.endingPosition.x + animationOverlayConfig.endingPosition.width),
+          right:
+            Dimensions.get("window").width -
+            (animationOverlayConfig.endingPosition.x + animationOverlayConfig.endingPosition.width),
         }}
       >
-        <ListItem
+        <ListItemContainer
           item={animationOverlayConfig.partnerItem}
           renderItem={renderItem}
           index={animationOverlayConfig.startIndex}
@@ -99,7 +103,7 @@ export const AnimationOverlay = <T,>({
             (animationOverlayConfig.startingPosition.x + animationOverlayConfig.startingPosition.width),
         }}
       >
-        <ListItem<T>
+        <ListItemContainer<T>
           item={animationOverlayConfig.item}
           renderItem={renderItem}
           index={
