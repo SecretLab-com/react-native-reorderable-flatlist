@@ -13,13 +13,14 @@ export type ReorderableFlatListProps<T> = {
     renderItem: ListRenderItem<T>;
     keyExtractor: (data: T) => string;
     onReorder?: (newData: T[]) => void;
+    onReorderIds?: (ids: string[]) => void;
     style?: FlatListProps<T>["style"];
     contentContainerStyle?: FlatListProps<T>["contentContainerStyle"];
     showsVerticalScrollIndicator?: FlatListProps<T>["showsVerticalScrollIndicator"];
     showsHorizontalScrollIndicator?: FlatListProps<T>["showsHorizontalScrollIndicator"];
     CellRendererComponent?: FlatListProps<T>["CellRendererComponent"];
 };
-export type ListItemProps<T> = {
+export type ListItemContainerProps<T> = {
     item: T;
     index: number;
     listLength: number;
