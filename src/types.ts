@@ -18,7 +18,7 @@ export type ReorderableFlatListProps<T> = {
 
   // Standard Props
 
-  containerStyle?: FlatListProps<T>["style"];
+  style?: FlatListProps<T>["style"];
   contentContainerStyle?: FlatListProps<T>["contentContainerStyle"];
 
   showsVerticalScrollIndicator?: FlatListProps<T>["showsVerticalScrollIndicator"];
