@@ -6,9 +6,10 @@ import { ReorderableFlatListProps, AnimationOverlayConfig, AnimationOverlayProps
 import { handleMoveDown, handleMoveUp } from "./utils";
 
 export const ReorderableFlatList = <T,>(props: ReorderableFlatListProps<T>) => {
-  const { renderItem: renderItemProp, keyExtractor, data: dataProp, ...flatListProps } = props;
+  const { renderItem: renderItemProp, keyExtractor, data: dataProp, onReorder, onReorderIds, ...flatListProps } = props;
   const [data, setData] = useState<T[]>(dataProp ?? []);
 
+  // Synchronize the internal state if a prop update occurs
   useEffect(() => {
     setData(props.data);
   }, [props.data]);
@@ -19,8 +20,8 @@ export const ReorderableFlatList = <T,>(props: ReorderableFlatListProps<T>) => {
 
   const moveUp = useCallback(
     async (item: T, startingPosition: { x: number; y: number; height: number; width: number }) => {
-      const index = data.findIndex((thisItem) => props.keyExtractor(thisItem) === props.keyExtractor(item));
-      const itemAboveId = props.keyExtractor(data[index - 1]);
+      const index = data.findIndex((thisItem) => keyExtractor(thisItem) === keyExtractor(item));
+      const itemAboveId = keyExtractor(data[index - 1]);
       const itemAboveRef = itemRefs.current[itemAboveId];
       const { x, y, width, height } = await itemAboveRef.measureInWindow();
 
@@ -33,13 +34,13 @@ export const ReorderableFlatList = <T,>(props: ReorderableFlatListProps<T>) => {
         endingPosition: { x, y, width, height },
       });
     },
-    [data, props],
+    [data, keyExtractor],
   );
 
   const moveDown = useCallback(
     async (item: T, startingPosition: { x: number; y: number; height: number; width: number }) => {
-      const index = data.findIndex((thisItem) => props.keyExtractor(thisItem) === props.keyExtractor(item));
-      const itemBelowId = props.keyExtractor(data[index + 1]);
+      const index = data.findIndex((thisItem) => keyExtractor(thisItem) === keyExtractor(item));
+      const itemBelowId = keyExtractor(data[index + 1]);
 
       const itemBelowRef = itemRefs.current[itemBelowId];
       const { x, y, width, height } = await itemBelowRef.measureInWindow();
@@ -52,14 +53,14 @@ export const ReorderableFlatList = <T,>(props: ReorderableFlatListProps<T>) => {
         endingPosition: { x, y, width, height },
       });
     },
-    [data, props],
+    [data, keyExtractor],
   );
 
   const renderItem: ListRenderItem<T> = useCallback(
     ({ item, index }) => {
       const handleRef = (ref: ListItemContainer | null) => {
         if (ref) {
-          itemRefs.current[props.keyExtractor(item)] = ref;
+          itemRefs.current[keyExtractor(item)] = ref;
         }
       };
       return (
@@ -74,19 +75,30 @@ export const ReorderableFlatList = <T,>(props: ReorderableFlatListProps<T>) => {
         />
       );
     },
-    [data.length, moveDown, moveUp, props, renderItemProp],
+    [data.length, moveDown, moveUp, keyExtractor, renderItemProp],
   );
 
   const handleOverlayAnimationComplete = useCallback<AnimationOverlayProps<T>["onOverlayAnimationComplete"]>(
     (operation, item) => {
       if (operation === "moveUp") {
-        setData((currentData) => handleMoveUp(currentData, item, props.keyExtractor));
+        setData((currentData) => {
+          const reorderedData = handleMoveUp(currentData, item, keyExtractor);
+          if (onReorder) onReorder(reorderedData);
+          if (onReorderIds) onReorderIds(reorderedData.map(keyExtractor));
+          return reorderedData;
+        });
       } else {
-        setData((currentData) => handleMoveDown(currentData, item, props.keyExtractor));
+        setData((currentData) => {
+          const reorderedData = handleMoveDown(currentData, item, keyExtractor);
+
+          if (onReorder) onReorder(reorderedData);
+          if (onReorderIds) onReorderIds(reorderedData.map(keyExtractor));
+          return reorderedData;
+        });
       }
       setOverlay(null);
     },
-    [props.keyExtractor],
+    [onReorder, onReorderIds, keyExtractor],
   );
 
   return (
@@ -94,7 +106,7 @@ export const ReorderableFlatList = <T,>(props: ReorderableFlatListProps<T>) => {
       <FlatList
         data={data}
         renderItem={renderItem}
-        keyExtractor={(item) => props.keyExtractor(item)}
+        keyExtractor={(item) => keyExtractor(item)}
         {...flatListProps}
       />
       {overlay && (

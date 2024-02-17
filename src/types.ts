@@ -15,6 +15,7 @@ export type ReorderableFlatListProps<T> = {
   renderItem: ListRenderItem<T>;
   keyExtractor: (data: T) => string;
   onReorder?: (newData: T[]) => void;
+  onReorderIds?: (ids: string[]) => void;
 
   // Standard Props
 
