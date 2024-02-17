@@ -1,4 +1,4 @@
-import { Animated, View } from "react-native";
+import { Animated, Modal, View } from "react-native";
 import { AnimationOverlayProps } from "./types";
 import { ListItem } from "./ListItem";
 import { useEffect, useRef } from "react";
@@ -31,7 +31,7 @@ export const AnimationOverlay = <T,>({
   }, [animationOverlayConfig, animation, onOverlayAnimationComplete]);
 
   return (
-    <View
+    <Modal
       style={{
         position: "absolute",
         top: 0,
@@ -109,6 +109,6 @@ export const AnimationOverlay = <T,>({
           listLength={listLength}
         />
       </Animated.View>
-    </View>
+    </Modal>
   );
 };
