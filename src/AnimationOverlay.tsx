@@ -28,7 +28,7 @@ export const AnimationOverlay = <T,>({
     } else {
       animation.setValue(0);
     }
-  }, [animationOverlayConfig, animation]);
+  }, [animationOverlayConfig, animation, onOverlayAnimationComplete]);
 
   return (
     <View

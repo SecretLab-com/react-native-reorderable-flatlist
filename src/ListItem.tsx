@@ -76,7 +76,7 @@ const ListItemComponent = <T,>(
       canMoveDown: index < listLength - 1,
       canMoveUp: index > 0,
     });
-  }, []);
+  }, [handleMoveDown, handleMoveUp, index, item, listLength, renderItem]);
 
   return (
     <View ref={viewRef} style={[styles.listItem]}>

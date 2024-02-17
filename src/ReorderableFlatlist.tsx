@@ -20,7 +20,7 @@ export const ReorderableFlatList = <T,>(props: ReorderableFlatListProps<T>) => {
 
   useEffect(() => {
     setData(props.data);
-  }, []);
+  }, [props.data]);
 
   const [overlay, setOverlay] = useState<AnimationOverlayConfig<T> | null>(
     null
@@ -49,7 +49,7 @@ export const ReorderableFlatList = <T,>(props: ReorderableFlatListProps<T>) => {
         endingPosition: { x, y, width, height },
       });
     },
-    [data]
+    [data, props]
   );
 
   const moveDown = useCallback(
@@ -73,7 +73,7 @@ export const ReorderableFlatList = <T,>(props: ReorderableFlatListProps<T>) => {
         endingPosition: { x, y, width, height },
       });
     },
-    [data]
+    [data, props]
   );
 
   const renderItem: ListRenderItem<T> = useCallback(
@@ -95,7 +95,7 @@ export const ReorderableFlatList = <T,>(props: ReorderableFlatListProps<T>) => {
         />
       );
     },
-    [moveDown, moveUp]
+    [data.length, moveDown, moveUp, props, renderItemProp]
   );
 
   const handleOverlayAnimationComplete = useCallback<
@@ -111,7 +111,7 @@ export const ReorderableFlatList = <T,>(props: ReorderableFlatListProps<T>) => {
       );
     }
     setOverlay(null);
-  }, []);
+  }, [props.keyExtractor]);
 
   return (
     <View>
