@@ -1,4 +1,5 @@
 # react-native-reorderable-flatlist
+A lightweight, zero-dependency flatlist with a simple item reordering animation
 
 ## Installation
  - Using npm: `npm i react-native-reorderable-flatlist`
