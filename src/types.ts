@@ -21,8 +21,10 @@ export type ReorderableFlatListProps<T> = {
   containerStyle?: FlatListProps<T>["style"];
   contentContainerStyle?: FlatListProps<T>["contentContainerStyle"];
 
-  showsVerticalScrollIndicator?: FlatListProps<T>["showsVerticalScrollIndicator"]
-  showsHorizontalScrollIndicator?: FlatListProps<T>["showsHorizontalScrollIndicator"]
+  showsVerticalScrollIndicator?: FlatListProps<T>["showsVerticalScrollIndicator"];
+  showsHorizontalScrollIndicator?: FlatListProps<T>["showsHorizontalScrollIndicator"];
+
+  CellRendererComponent?: FlatListProps<T>["CellRendererComponent"];
 };
 
 export type ListItemProps<T> = {
@@ -30,14 +32,8 @@ export type ListItemProps<T> = {
   index: number;
   listLength: number;
   renderItem: ListRenderItem<T>;
-  onMoveUp?: (
-    item: T,
-    startingPosition: { x: number; y: number; height: number; width: number }
-  ) => void;
-  onMoveDown?: (
-    item: T,
-    startingPosition: { x: number; y: number; height: number; width: number }
-  ) => void;
+  onMoveUp?: (item: T, startingPosition: { x: number; y: number; height: number; width: number }) => void;
+  onMoveDown?: (item: T, startingPosition: { x: number; y: number; height: number; width: number }) => void;
 };
 
 export type AnimationOverlayConfig<T> = {
@@ -51,10 +47,7 @@ export type AnimationOverlayConfig<T> = {
 
 export type AnimationOverlayProps<T> = {
   animationOverlayConfig: AnimationOverlayConfig<T>;
-  onOverlayAnimationComplete: (
-    operation: "moveUp" | "moveDown",
-    item: T
-  ) => void;
+  onOverlayAnimationComplete: (operation: "moveUp" | "moveDown", item: T) => void;
   renderItem: ReorderableFlatListProps<T>["renderItem"];
   listLength: number;
 };

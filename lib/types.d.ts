@@ -17,6 +17,7 @@ export type ReorderableFlatListProps<T> = {
     contentContainerStyle?: FlatListProps<T>["contentContainerStyle"];
     showsVerticalScrollIndicator?: FlatListProps<T>["showsVerticalScrollIndicator"];
     showsHorizontalScrollIndicator?: FlatListProps<T>["showsHorizontalScrollIndicator"];
+    CellRendererComponent?: FlatListProps<T>["CellRendererComponent"];
 };
 export type ListItemProps<T> = {
     item: T;
