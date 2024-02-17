@@ -1,6 +1,6 @@
 {
   "name": "react-native-reorderable-flatlist",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A lightweight, zero-dependency flatlist that allows list reordering animations",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
