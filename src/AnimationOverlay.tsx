@@ -1,4 +1,4 @@
-import { Animated, Modal, View } from "react-native";
+import { Animated, Dimensions, Modal, View } from "react-native";
 import { AnimationOverlayProps } from "./types";
 import { ListItem } from "./ListItem";
 import { useEffect, useRef } from "react";
@@ -32,6 +32,7 @@ export const AnimationOverlay = <T,>({
 
   return (
     <Modal
+      transparent
       style={{
         position: "absolute",
         top: 0,
@@ -46,8 +47,10 @@ export const AnimationOverlay = <T,>({
           position: "absolute",
           top: animationOverlayConfig.startingPosition.y,
           height: animationOverlayConfig.startingPosition.height,
-          left: 0,
-          right: 0,
+          left: animationOverlayConfig.startingPosition.x,
+          right:
+            Dimensions.get("window").width -
+            (animationOverlayConfig.startingPosition.x + animationOverlayConfig.startingPosition.width),
           backgroundColor: "white",
         }}
       />
@@ -57,8 +60,8 @@ export const AnimationOverlay = <T,>({
           position: "absolute",
           top: animationOverlayConfig.endingPosition.y,
           height: animationOverlayConfig.endingPosition.height,
-          left: 0,
-          right: 0,
+          left: animationOverlayConfig.startingPosition.x,
+          right: Dimensions.get("window").width - (animationOverlayConfig.startingPosition.x + animationOverlayConfig.startingPosition.width),
           backgroundColor: "white",
         }}
       />
@@ -68,12 +71,10 @@ export const AnimationOverlay = <T,>({
           position: "absolute",
           top: animation.interpolate({
             inputRange: [0, 1],
-            outputRange: [
-              animationOverlayConfig.endingPosition.y,
-              animationOverlayConfig.startingPosition.y,
-            ],
+            outputRange: [animationOverlayConfig.endingPosition.y, animationOverlayConfig.startingPosition.y],
           }),
-          width: "100%",
+          left: animationOverlayConfig.endingPosition.x,
+          right: Dimensions.get("window").width - (animationOverlayConfig.endingPosition.x + animationOverlayConfig.endingPosition.width),
         }}
       >
         <ListItem
@@ -89,13 +90,13 @@ export const AnimationOverlay = <T,>({
           position: "absolute",
           top: animation.interpolate({
             inputRange: [0, 1],
-            outputRange: [
-              animationOverlayConfig.startingPosition.y,
-              animationOverlayConfig.endingPosition.y,
-            ],
+            outputRange: [animationOverlayConfig.startingPosition.y, animationOverlayConfig.endingPosition.y],
           }),
           height: animationOverlayConfig.startingPosition.height,
-          width: "100%",
+          left: animationOverlayConfig.startingPosition.x,
+          right:
+            Dimensions.get("window").width -
+            (animationOverlayConfig.startingPosition.x + animationOverlayConfig.startingPosition.width),
         }}
       >
         <ListItem<T>
